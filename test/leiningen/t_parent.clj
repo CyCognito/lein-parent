@@ -89,4 +89,10 @@
       ;; with-profiles calls the set-profiles function to 'activate' selected profiles
       (let [project (read-child-project "with_parent_with_profile")]
         (is (nil? (:bar project)))
-        (is (= "bar" (get-in project [:profiles :foo :bar])))))))
+        (is (= "bar" (get-in project [:profiles :foo :bar]))))))
+
+  (testing "child has higher priority in merges"
+    (let [project (read-child-project "with_parent_with_aliases")]
+      (is (= {"my-alias"   ["child"]
+              "my-alias-2" ["parent"]}
+             (select-keys (:aliases project) ["my-alias" "my-alias-2"]))))))
